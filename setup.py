@@ -21,26 +21,26 @@ def get_requirements():
     try:
         requirements = _read_requirements("requirements.txt")
     except ValueError:
-        print("Failed to read requirements.txt in vllm_ems.")
+        print("Failed to read requirements.txt in attn_trace.")
         requirements = []
     return requirements
 
 
 setup(
-    name="kv_cache_affinity",
+    name="attn_trace",
     version="0.1.0",
     author="b30080604",
     author_email="None",
-    description="vLLM ascend plugin",
+    description="vLLM 0.23 attention/KV-cache manager path tracer (read-only)",
     packages=find_packages(
-        include=("kv_cache_affinity", "kv_cache_affinity.*"),
-        exclude=("benchmarks", "examples", "tests", "wise_inference_engine", "wise_inference_engine.*"),
+        include=("attn_trace", "attn_trace.*"),
+        exclude=("benchmarks", "examples", "tests"),
     ),
     python_requires='>=3.9',
     install_requires=get_requirements(),
     entry_points={
         "vllm.general_plugins": [
-            "kv_cache_affinity = kv_cache_affinity.plugin:register",
+            "attn_trace = attn_trace.plugin:register",
         ],
     },
 )

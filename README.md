@@ -6,13 +6,29 @@
 
 ## 安装
 
+支持两种安装方式，都会注册成标准 vLLM plugin（`vllm.general_plugins` entry point），
+**vLLM 启动时会在主进程和每个 EngineCore 子进程各调用一次 `attn_trace.plugin.register()`**，
+多 DP / multiproc executor 场景自动全覆盖。
+
+### 方式 1：pip 开发装（本地 dev / 快速迭代）
+
 ```bash
 git clone https://github.com/XiangyuBi0519/attn-trace.git
 cd attn-trace
 pip install -e .
 ```
 
-装完就是一个标准的 vLLM plugin（`vllm.general_plugins` entry point），**vLLM 启动时会在主进程和每个 EngineCore 子进程各调用一次 `register()`**，多 DP / multiproc executor 场景自动全覆盖。
+### 方式 2：复制到框架路径 + setup.py 安装（公司内部部署流程）
+
+跟 `kv_cache_affinity` 同款安装方式：把 `attn_trace/` 目录 + `setup.py` + `requirements.txt`
+一起放到目标环境的部署路径下，然后
+
+```bash
+pip install .
+```
+
+`pyproject.toml` 只声明了 build 后端（setuptools），所有元数据（name / version / entry_points /
+依赖）都在 `setup.py` 里，两条路径都能干净地走通。
 
 ## 用法：无插件基线
 

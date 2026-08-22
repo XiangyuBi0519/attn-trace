@@ -7,7 +7,8 @@ attn_trace — vLLM 0.23 attention/KV-cache manager path tracer
 3. 运行时 remove_skipped_blocks 会不会被真正触发（get_num_skipped_tokens > 0）？
 4. free_blocks(prepend=True) 具体在什么时机、被哪个 manager 触发？
 
-使用方式：作为 vLLM plugin 自动加载（推荐），或手动 import 后调用 enable()。
+使用方式：作为 vLLM plugin 自动加载（推荐，走 plugin.py:register），
+或手动 ``import attn_trace; attn_trace.enable()``。
 详见 README.md。
 """
 import inspect
@@ -144,6 +145,5 @@ def enable():
     )
 
 
-def register():
-    """vLLM plugin entry point. vLLM 会在主进程 + 每个 EngineCore 子进程各调一次。"""
-    enable()
+# 注：vLLM plugin entry point 定义在 attn_trace.plugin.register（见 setup.py），
+# 不放在这里——避免 vLLM plugin 加载器 import 顶级包时提前触发 enable()。

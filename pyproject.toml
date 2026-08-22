@@ -1,17 +1,7 @@
+# 只声明 build 后端，其余元数据（name/version/entry_points/deps）全部由 setup.py 提供。
+# 这样两条安装路径都能走：
+#   1) pip install -e .          （标准 dev 流程）
+#   2) 复制到框架路径 + setup.py 安装 （公司内部部署管线）
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = "attn-trace"
-version = "0.1.0"
-description = "Read-only tracer for vLLM 0.23 attention/KV-cache manager path"
-requires-python = ">=3.10"
-
-# vLLM plugin entry point: vLLM will call attn_trace.register() at startup
-# in each EngineCore process. See: https://docs.vllm.ai/en/latest/design/plugin_system.html
-[project.entry-points."vllm.general_plugins"]
-attn_trace = "attn_trace:register"
-
-[tool.setuptools.packages.find]
-where = ["."]

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "attn-trace"
+version = "0.1.0"
+description = "Read-only tracer for vLLM 0.23 attention/KV-cache manager path"
+requires-python = ">=3.10"
+
+# vLLM plugin entry point: vLLM will call attn_trace.register() at startup
+# in each EngineCore process. See: https://docs.vllm.ai/en/latest/design/plugin_system.html
+[project.entry-points."vllm.general_plugins"]
+attn_trace = "attn_trace:register"
+
+[tool.setuptools.packages.find]
+where = ["."]

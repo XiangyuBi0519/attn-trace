@@ -1,7 +1,24 @@
-# 只声明 build 后端，其余元数据（name/version/entry_points/deps）全部由 setup.py 提供。
-# 这样两条安装路径都能走：
-#   1) pip install -e .          （标准 dev 流程）
-#   2) 复制到框架路径 + setup.py 安装 （公司内部部署管线）
 [build-system]
 requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "attn-trace"
+version = "0.1.0"
+description = "Startup-time attention backend + KV cache spec logger for vLLM (works with vllm-ascend)"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "attn-trace" }]
+license = { text = "Apache-2.0" }
+# vllm is intentionally NOT declared as a hard dependency: install it inside
+# a container that already has vllm / vllm-ascend, and this plugin will bind
+# to whatever version is present.
+dependencies = []
+
+# vLLM discovers third-party plugins via this entry-point group and calls
+# the registered callable exactly once during engine startup.
+[project.entry-points."vllm.general_plugins"]
+attn_trace = "attn_trace.plugin:register"
+
+[tool.setuptools.packages.find]
+where = ["src"]

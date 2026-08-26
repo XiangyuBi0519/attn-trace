@@ -1,125 +1,46 @@
 # attn-trace
 
-只读探针，追踪 vLLM 0.23 里模型走了哪些 attention manager 类型 + 什么时候触发 `prepend=True` 路径。**不修改行为**，只加日志。
+启动时把 vLLM 选中的 **attention backend / KV cache spec / KV manager / hash block 粒度**全打成一行行结构化日志，帮你判断当前模型 + 后端组合是否与你的插件（如 `kv_cache_affinity`）的 block-hash 语义匹配。
 
-设计目的：定位「同一插件、不同模型行为不一致」这类问题时，先脱离业务插件把模型自身的 attention 路径打透，避免瞎猜。
+零侵入：不改 vLLM / vllm-ascend 源码，pip 装完由 vLLM 的 `vllm.general_plugins` 入口自动加载。
 
-## 安装
+## 装
 
-支持两种安装方式，都会注册成标准 vLLM plugin（`vllm.general_plugins` entry point），
-**vLLM 启动时会在主进程和每个 EngineCore 子进程各调用一次 `attn_trace.plugin.register()`**，
-多 DP / multiproc executor 场景自动全覆盖。
-
-### 方式 1：pip 开发装（本地 dev / 快速迭代）
+在你拉起服务的容器里：
 
 ```bash
-git clone https://github.com/XiangyuBi0519/attn-trace.git
-cd attn-trace
-pip install -e .
+pip install ./attn_trace          # 或 pip install /path/to/attn_trace-0.1.0-*.whl
 ```
 
-### 方式 2：复制到框架路径 + setup.py 安装（公司内部部署流程）
+## 打日志的位置（一次拉起触发）
 
-跟 `kv_cache_affinity` 同款安装方式：把 `attn_trace/` 目录 + `setup.py` + `requirements.txt`
-一起放到目标环境的部署路径下，然后
+| tag | 触发点 | 含义 |
+|---|---|---|
+| `[ATTN_BACKEND_PICK]` | `vllm/v1/attention/selector.py::_cached_get_attn_backend` | 每种 (head_size, dtype, use_mla, use_sparse, ...) 组合被选到的 backend 类 |
+| `[NPU_ATTN_MAP]` | `vllm_ascend/platform.py::NPUPlatform.get_attn_backend_cls` | Ascend 侧分派到 MLA / SFA / DSA / FA3 / 普通 / 310p |
+| `[LAYER_KV_SPEC]` | `Attention.get_kv_cache_spec`（及所有子类） | 每个 layer 生成的 spec，含 sliding_window / attention_chunk_size |
+| `[KV_GROUP]` | `EngineCore._initialize_kv_caches` 末尾 | 最终归并出的每个 KV cache group（spec 类、block_size、层数、样例 layer 名） |
+| `[BLOCK_SIZES]` | `resolve_kv_cache_block_sizes` | scheduler_block_size / hash_block_size / 每组 block_size —— **决定你插件按 hash 重算 block 时对不对得上** |
+| `[KV_MGR_INIT]` | `get_manager_for_kv_cache_spec` | 每个组实际用哪个 Manager 类（FullAttention / SlidingWindow / ChunkedLocal / Mamba / ...） |
+| `[KV_STARTUP_SUMMARY]` | `EngineCore.__init__` 末尾 | 整机汇总：几组、每组几层、hash_block_size、prefix caching / kv connector 开关 |
 
-```bash
-pip install .
-```
+## 环境变量
 
-`pyproject.toml` 只声明了 build 后端（setuptools），所有元数据（name / version / entry_points /
-依赖）都在 `setup.py` 里，两条路径都能干净地走通。
+- `ATTN_TRACE_DISABLE=1`：完全关掉（不打日志、不 patch）
+- `ATTN_TRACE_LOG_LEVEL=DEBUG|INFO|WARNING`：调整插件自己的 logger 级别，默认 `INFO`
+- `ATTN_TRACE_LOG_FILE=/path/to/file.log`：把插件日志额外写到文件（追加），默认只往 stderr
 
-## 用法：无插件基线
+## 手动触发（非 entry-point 场景）
 
-**关键：先把 `kv_cache_affinity` 等业务插件从加载列表里去掉**，只留 `attn_trace`：
-
-```bash
-VLLM_PLUGINS=attn_trace vllm serve <model> ...
-```
-
-或者启动脚本里 `--enable-plugins attn_trace`（版本用词不同，看你现在怎么加载业务插件的，把它换掉/临时禁掉即可）。
-
-## 看日志
-
-启动后你会得到四类日志（都以 `attn_trace` 命名，容易 grep）：
-
-### 1. `[MGR_INIT]` — 每个 manager 实例化时的元信息
-
-```
-[MGR_INIT] cls=SlidingWindowManager group_id=0 block_size=16 spec_type=SlidingWindowSpec spec_attrs={'sliding_window': 4096, 'num_kv_heads': 16, 'use_mla': False}
-[MGR_INIT] cls=FullAttentionManager group_id=1 block_size=16 spec_type=FullAttentionSpec spec_attrs={'num_kv_heads': 16, 'use_mla': False}
-```
-
-### 2. `[COORD_INIT]` — KVCacheGroup 完整拓扑（启动阶段一次性）
-
-```
-[COORD_INIT] cls=HybridKVCacheCoordinator num_groups=2
-[COORD_INIT]   group[0] manager=SlidingWindowManager spec=SlidingWindowSpec layers=['model.layers.0.self_attn.attn', ..., 'model.layers.61.self_attn.attn'] (total=32)
-[COORD_INIT]   group[1] manager=FullAttentionManager spec=FullAttentionSpec layers=[...] (total=32)
-```
-
-**这一段就把模型架构完全暴露了**——用了哪些 attention 类型、每类各多少层、有没有 MLA、sliding window 多大。
-
-### 3. `[SKIP_FIRST]` — 每种 manager 第一次进 skipped 分支的时机（运行时）
-
-```
-[SKIP_FIRST] SlidingWindowManager.get_num_skipped_tokens()=64 (total_computed=4160) — this manager WILL trigger prepend_n path
-```
-
-如果 5 分钟对话跑完都没看到这条，说明请求长度还没超过窗口，`remove_skipped_blocks → prepend_n` 走不到（但迟早会走到）。
-
-### 4. `[PREPEND_FIRST]` — 每个调用点第一次触发 `free_blocks(prepend=True)`
-
-```
-[PREPEND_FIRST] free_blocks(prepend=True) called from .../single_type_kv_cache_manager.py:free:764 (n=3)
-[PREPEND_FIRST] free_blocks(prepend=True) called from .../single_type_kv_cache_manager.py:remove_skipped_blocks:501 (n=7)
-```
-
-区分两个触发点：
-- `free:764` = **`SlidingWindowManager.free()`**，每个请求结束都触发。
-- `remove_skipped_blocks:501` = **窗口滑动触发**，长上下文才见。
-
-后续同一调用点静默避免刷屏；需要频次统计的话把 `_first_free_prepend_seen` 那段去掉。
-
-## 对照跑
-
-按下面顺序跑一次，就能拿到确定性答案：
-
-1. **模型 A + `VLLM_PLUGINS=attn_trace`（无业务插件）**：
-   - 看 `[COORD_INIT]` 有没有 `SlidingWindowManager` / `ChunkedLocalAttentionManager` 之类。
-   - 发几条长对话（超过它的窗口），看 `[SKIP_FIRST]` / `[PREPEND_FIRST]` 出不出。
-2. **模型 B + `VLLM_PLUGINS=attn_trace`（无业务插件）**：
-   - 同样两件事。
-3. 对比两次日志。
-
-三种可能的结论：
-
-| 结果 | 解读 |
-|---|---|
-| A 只有 FullAttentionManager；B 有 SWA/Chunked | 是模型架构差异，问题彻底解释清楚 |
-| 两个都有 SWA，但 A 测试请求没触发 SKIP_FIRST | 之前只是"运气好"没踩，其实一样有隐患 |
-| 两个都没 SWA、都触发 PREPEND | 说明是别的路径（可能 vllm-ascend 自己加了些什么）导致，需要看 stack |
-
-## 手动模式（不用 plugin）
-
-如果不想装成 plugin，也可以在启动脚本里手动调用：
+如果你不走 vLLM 插件入口，也可以在自己的启动脚本里显式调：
 
 ```python
-import attn_trace
-attn_trace.enable()   # 幂等；主进程调一次即可，但子进程需要各自调
+from attn_trace.plugin import register
+register()
 ```
 
-注意手动模式下**子进程不会自动加载**，多 DP / multiproc executor 场景请务必走 plugin 路径。
+允许多次调用，第二次起是 no-op。
 
-## 卸载
+## 与 `kv_cache_affinity` 的关系
 
-```bash
-pip uninstall attn-trace
-```
-
-调完就删，不留生产污染。
-
-## License
-
-Apache-2.0
+`attn-trace` 只读不写：不改变任何 vLLM 行为，只把 backend / spec / manager / 粒度打日志。可以和 `kv_cache_affinity` 一起装、都通过 `vllm.general_plugins` 加载，各自独立。

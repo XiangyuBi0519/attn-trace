@@ -1,2 +1,0 @@
-vllm >= 0.17.0
-vllm_ascend >= 0.17.0

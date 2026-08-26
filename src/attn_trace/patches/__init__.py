@@ -5,9 +5,9 @@ logger = get_logger()
 
 def apply_all() -> None:
     """依次应用所有 patch。任何一个失败都只 warning，不中断其它 patch，也不影响启动。"""
-    from . import selector, engine_init, manager_init, layer_spec
+    from . import selector, engine_init, manager_init, layer_spec, attn_impl
 
-    for mod in (selector, engine_init, manager_init, layer_spec):
+    for mod in (selector, engine_init, manager_init, layer_spec, attn_impl):
         _safe_apply(mod)
 
     # Ascend 侧可选。没装 vllm_ascend 就静默跳过；装了但函数签名对不上则 warning。

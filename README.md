@@ -19,6 +19,7 @@ pip install ./attn_trace          # 或 pip install /path/to/attn_trace-0.1.0-*.
 | `[ATTN_BACKEND_PICK]` | `vllm/v1/attention/selector.py::_cached_get_attn_backend` | 每种 (head_size, dtype, use_mla, use_sparse, ...) 组合被选到的 backend 类 |
 | `[NPU_ATTN_MAP]` | `vllm_ascend/platform.py::NPUPlatform.get_attn_backend_cls` | Ascend 侧分派到 MLA / SFA / DSA / FA3 / 普通 / 310p |
 | `[LAYER_KV_SPEC]` | `Attention.get_kv_cache_spec`（及所有子类） | 每个 layer 生成的 spec，含 sliding_window / attention_chunk_size |
+| `[ATTN_IMPL_INIT]` | `Attention.__init__`（及所有子类）末尾 | 每个 layer **实例化后**真正持有的 backend 名 + impl 类，跨模型对比 impl 差异用 |
 | `[KV_GROUP]` | `EngineCore._initialize_kv_caches` 末尾 | 最终归并出的每个 KV cache group（spec 类、block_size、层数、样例 layer 名） |
 | `[BLOCK_SIZES]` | `resolve_kv_cache_block_sizes` | scheduler_block_size / hash_block_size / 每组 block_size —— **决定你插件按 hash 重算 block 时对不对得上** |
 | `[KV_MGR_INIT]` | `get_manager_for_kv_cache_spec` | 每个组实际用哪个 Manager 类（FullAttention / SlidingWindow / ChunkedLocal / Mamba / ...） |
@@ -40,6 +41,12 @@ register()
 ```
 
 允许多次调用，第二次起是 no-op。
+
+## 参考模型档案
+
+抓到过的模型 KV 布局观测记录放在 [`docs/models/`](docs/models/) 里，方便跨模型对比。新增模型跑完后欢迎把 `[KV_STARTUP_SUMMARY]` / `[KV_GROUP]` / `[BLOCK_SIZES]` 三段整理成同格式 md 补进去。
+
+- [DeepSeek V4 Flash](docs/models/deepseek-v4-flash.md) —— MLA + Sparse Attention（indexer + compressor）+ SWA，6 组 hybrid KV
 
 ## 与 `kv_cache_affinity` 的关系
 

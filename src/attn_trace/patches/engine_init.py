@@ -1,16 +1,20 @@
-"""Patches: `EngineCore._initialize_kv_caches`, `EngineCore.__init__`,
-`resolve_kv_cache_block_sizes`.
+"""Patches: `EngineCore.__init__` (+ EngineCoreProc / DPEngineCoreProc),
+`EngineCore._initialize_kv_caches`, and `resolve_kv_cache_block_sizes`.
 
 Emits:
 - `[BLOCK_SIZES]` right after vLLM resolves scheduler_block_size /
   hash_block_size. THIS IS THE ONE that decides whether your plugin's
-  `Request.from_engine_core_request` re-hashed block_hashes align with what
-  the pool actually stores.
-- `[KV_GROUP]` for every KV cache group finalized inside `_initialize_kv_caches`.
-- `[KV_STARTUP_SUMMARY]` at the end of `EngineCore.__init__`: one-line summary
-  of specs, managers, groups, layers, num_blocks, prefix caching, connector.
+  `Request.from_engine_core_request` re-hashed block_hashes align with
+  what the pool actually stores.
+- `[KV_GROUP]` for every KV cache group finalized inside
+  `_initialize_kv_caches`.
+- `[KV_STARTUP_SUMMARY]` at the end of `EngineCore.__init__` (also
+  covers EngineCoreProc / DPEngineCoreProc which own their own __init__
+  but call `super().__init__()`; the wrapper uses try/finally so the
+  summary is still emitted even if downstream init raises).
 """
 
+import importlib
 from collections import Counter
 
 from ..logutil import get_logger
@@ -21,7 +25,7 @@ logger = get_logger()
 def apply() -> None:
     _patch_resolve_block_sizes()
     _patch_initialize_kv_caches()
-    _patch_engine_core_init()
+    _patch_engine_core_init_chain()
 
 
 # ---------------------------------------------------------------------------
@@ -29,12 +33,13 @@ def apply() -> None:
 # ---------------------------------------------------------------------------
 
 def _patch_resolve_block_sizes() -> None:
+    import sys
     import vllm.v1.core.kv_cache_utils as ku
 
-    _orig = ku.resolve_kv_cache_block_sizes
+    orig = ku.resolve_kv_cache_block_sizes
 
     def wrapped(kv_cache_config, vllm_config):
-        scheduler_bs, hash_bs = _orig(kv_cache_config, vllm_config)
+        scheduler_bs, hash_bs = orig(kv_cache_config, vllm_config)
         try:
             groups = kv_cache_config.kv_cache_groups
             logger.info(
@@ -56,16 +61,17 @@ def _patch_resolve_block_sizes() -> None:
         return scheduler_bs, hash_bs
 
     ku.resolve_kv_cache_block_sizes = wrapped
-    # 有些消费者以 `from ... import resolve_kv_cache_block_sizes` 提前 import，
-    # 把它们的本地符号也一并替换，避免旧引用逃过 patch。
-    for consumer in ("vllm.v1.engine.core",):
-        try:
-            import importlib
-            mod = importlib.import_module(consumer)
-            if hasattr(mod, "resolve_kv_cache_block_sizes"):
-                setattr(mod, "resolve_kv_cache_block_sizes", wrapped)
-        except Exception:
-            pass
+
+    # 把 `from vllm.v1.core.kv_cache_utils import resolve_kv_cache_block_sizes`
+    # 拿到的本地符号也一并替换
+    for name, mod in list(sys.modules.items()):
+        if not name.startswith("vllm."):
+            continue
+        if mod is None or mod is ku:
+            continue
+        if getattr(mod, "resolve_kv_cache_block_sizes", None) is orig:
+            mod.resolve_kv_cache_block_sizes = wrapped
+
     logger.info("attn_trace: patched resolve_kv_cache_block_sizes")
 
 
@@ -76,10 +82,10 @@ def _patch_resolve_block_sizes() -> None:
 def _patch_initialize_kv_caches() -> None:
     from vllm.v1.engine.core import EngineCore
 
-    _orig = EngineCore._initialize_kv_caches
+    orig = EngineCore._initialize_kv_caches
 
     def wrapped(self, vllm_config):
-        result = _orig(self, vllm_config)
+        result = orig(self, vllm_config)
         try:
             _log_kv_groups(result)
         except Exception as e:
@@ -101,12 +107,12 @@ def _log_kv_groups(kv_cache_config) -> None:
         spec = g.kv_cache_spec
         layer_names = list(g.layer_names)
         logger.info(
-            "[KV_GROUP] idx=%d spec=%s block_size=%s num_layers=%d "
+            "[KV_GROUP] idx=%d spec=%s.%s block_size=%s num_layers=%d "
             "num_kv_heads=%s head_size=%s dtype=%s "
             "sliding_window=%s attention_chunk_size=%s "
             "sample_layers=%s",
             i,
-            type(spec).__name__,
+            type(spec).__module__, type(spec).__name__,
             getattr(spec, "block_size", None),
             len(layer_names),
             getattr(spec, "num_kv_heads", None),
@@ -122,23 +128,77 @@ def _log_kv_groups(kv_cache_config) -> None:
 # KV_STARTUP_SUMMARY
 # ---------------------------------------------------------------------------
 
-def _patch_engine_core_init() -> None:
+def _patch_engine_core_init_chain() -> None:
+    """
+    Wrap __init__ on EngineCore + EngineCoreProc + DPEngineCoreProc.
+
+    Even though the subclasses call super().__init__() (so wrapping only the
+    base class would in principle work), wrap all three so:
+      1) 如果某个子类 __init__ 在 super().__init__() 之后又做了更多初始化，
+         我们打的 summary 反映的是 SUB 类 __init__ 结束后的完整状态；
+      2) 用 try/finally 保证即使后段初始化抛异常，summary 也会被 emit 一次
+         （便于定位启动失败）。
+    """
     from vllm.v1.engine.core import EngineCore
 
-    _orig = EngineCore.__init__
-
-    def wrapped(self, *args, **kwargs):
-        _orig(self, *args, **kwargs)
+    patched = []
+    for mod_path, cls_name in [
+        ("vllm.v1.engine.core", "EngineCore"),
+        ("vllm.v1.engine.core", "EngineCoreProc"),
+        ("vllm.v1.engine.core", "DPEngineCoreProc"),
+    ]:
         try:
-            _log_startup_summary(self)
-        except Exception as e:
-            logger.warning("[KV_STARTUP_SUMMARY] log failed: %s", e)
+            mod = importlib.import_module(mod_path)
+        except ImportError:
+            continue
+        cls = getattr(mod, cls_name, None)
+        if cls is None:
+            continue
+        if "__init__" not in cls.__dict__:
+            continue
+        orig = cls.__dict__["__init__"]
+        if getattr(orig, "_attn_trace_init_wrapped", False):
+            continue
 
-    EngineCore.__init__ = wrapped
-    logger.info("attn_trace: patched EngineCore.__init__ (summary)")
+        def _make_wrapper(orig_fn, tag):
+            def wrapper(self, *args, **kwargs):
+                exc = None
+                try:
+                    orig_fn(self, *args, **kwargs)
+                except BaseException as e:
+                    exc = e
+                    raise
+                finally:
+                    # 每个 init 链只 emit 一次 summary，由最外层类（真正被
+                    # 实例化的那个）负责。用一个实例属性做标记；如果整条链上
+                    # 没人（比如没 patch 到最外层类）emit，异常场景下由最深
+                    # 层兜底 emit 一次，避免完全没输出。
+                    should_emit = False
+                    if type(self).__name__ == tag:
+                        should_emit = True
+                    elif exc is not None and not getattr(
+                        self, "_attn_trace_summary_emitted", False
+                    ):
+                        should_emit = True
+                    if should_emit:
+                        try:
+                            _log_startup_summary(self, failed=exc is not None)
+                            self._attn_trace_summary_emitted = True
+                        except Exception as e2:
+                            logger.warning("[KV_STARTUP_SUMMARY] log failed: %s", e2)
+            wrapper._attn_trace_init_wrapped = True  # type: ignore[attr-defined]
+            return wrapper
+
+        setattr(cls, "__init__", _make_wrapper(orig, cls_name))
+        patched.append(cls_name)
+
+    logger.info(
+        "attn_trace: patched EngineCore.__init__ chain (%s)",
+        ", ".join(patched) if patched else "nothing patched",
+    )
 
 
-def _log_startup_summary(engine_core) -> None:
+def _log_startup_summary(engine_core, failed: bool = False) -> None:
     scheduler = getattr(engine_core, "scheduler", None)
     kv_cache_config = getattr(scheduler, "kv_cache_config", None) if scheduler else None
     groups = getattr(kv_cache_config, "kv_cache_groups", None) or []
@@ -146,8 +206,7 @@ def _log_startup_summary(engine_core) -> None:
     spec_hist = Counter(type(g.kv_cache_spec).__name__ for g in groups)
     total_layers = sum(len(g.layer_names) for g in groups)
 
-    # Managers 位于 scheduler.kv_cache_manager.coordinator.single_type_managers
-    mgr_hist = Counter()
+    mgr_hist: Counter = Counter()
     try:
         coord = scheduler.kv_cache_manager.coordinator  # type: ignore[union-attr]
         for m in getattr(coord, "single_type_managers", []):
@@ -160,11 +219,14 @@ def _log_startup_summary(engine_core) -> None:
     parallel_config = getattr(vllm_config, "parallel_config", None)
 
     logger.info(
-        "[KV_STARTUP_SUMMARY] num_groups=%d specs=%s managers=%s "
+        "[KV_STARTUP_SUMMARY] engine_class=%s failed_before_return=%s "
+        "num_groups=%d specs=%s managers=%s "
         "total_layers=%d num_blocks=%s hash_block_size=%s "
         "prefix_caching=%s has_kv_connector=%s "
         "data_parallel_size=%s tensor_parallel_size=%s "
         "pipeline_parallel_size=%s",
+        type(engine_core).__name__,
+        failed,
         len(groups),
         dict(spec_hist),
         dict(mgr_hist),

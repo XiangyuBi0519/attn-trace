@@ -1,11 +1,14 @@
 """Patch: `vllm.v1.core.single_type_kv_cache_manager.get_manager_for_kv_cache_spec`.
 
-Emits `[KV_MGR_INIT]` every time a per-group single-type manager is created,
-so you can see which Manager class (FullAttention / SlidingWindow /
-ChunkedLocal / Mamba / SinkFullAttention / Cross) is bound to each group.
+Emits `[KV_MGR_INIT]` every time a per-group single-type manager is created.
+Scans every already-imported module under `vllm.v1.core.*` for a
+`get_manager_for_kv_cache_spec` symbol (some coordinators do
+`from ... import get_manager_for_kv_cache_spec` before we get a chance to
+patch the source module), so hybrid-cache coordinators that inline the
+name still see our wrapped version.
 """
 
-import importlib
+import sys
 
 from ..logutil import get_logger
 
@@ -15,19 +18,19 @@ logger = get_logger()
 def apply() -> None:
     import vllm.v1.core.single_type_kv_cache_manager as stm
 
-    _orig = stm.get_manager_for_kv_cache_spec
+    orig = stm.get_manager_for_kv_cache_spec
 
     def wrapped(kv_cache_spec, max_num_batched_tokens, max_model_len, **kwargs):
-        manager = _orig(
+        manager = orig(
             kv_cache_spec, max_num_batched_tokens, max_model_len, **kwargs
         )
         try:
             logger.info(
-                "[KV_MGR_INIT] spec=%s manager=%s block_size=%s "
+                "[KV_MGR_INIT] spec=%s.%s manager=%s.%s block_size=%s "
                 "kv_group_id=%s max_admission_blocks=%s "
                 "max_num_batched_tokens=%s max_model_len=%s",
-                type(kv_cache_spec).__name__,
-                type(manager).__name__,
+                type(kv_cache_spec).__module__, type(kv_cache_spec).__name__,
+                type(manager).__module__, type(manager).__name__,
                 getattr(kv_cache_spec, "block_size", None),
                 kwargs.get("kv_cache_group_id"),
                 kwargs.get("max_admission_blocks_per_request"),
@@ -38,18 +41,23 @@ def apply() -> None:
             logger.warning("[KV_MGR_INIT] log failed: %s", e)
         return manager
 
+    # 覆盖源模块
     stm.get_manager_for_kv_cache_spec = wrapped
 
-    # 同名符号也可能被 kv_cache_coordinator 提前 import；一并覆盖。
-    for consumer in (
-        "vllm.v1.core.kv_cache_coordinator",
-        "vllm.v1.core.kv_cache_manager",
-    ):
-        try:
-            mod = importlib.import_module(consumer)
-            if hasattr(mod, "get_manager_for_kv_cache_spec"):
-                setattr(mod, "get_manager_for_kv_cache_spec", wrapped)
-        except Exception:
-            pass
+    # 扫描所有已经 import 的 vllm.v1.core.* 模块，把 `from ... import
+    # get_manager_for_kv_cache_spec` 拿到的本地符号也替换掉
+    replaced_in = []
+    for name, mod in list(sys.modules.items()):
+        if not name.startswith("vllm.v1.core."):
+            continue
+        if mod is None or mod is stm:
+            continue
+        if getattr(mod, "get_manager_for_kv_cache_spec", None) is orig:
+            mod.get_manager_for_kv_cache_spec = wrapped
+            replaced_in.append(name)
 
-    logger.info("attn_trace: patched get_manager_for_kv_cache_spec")
+    logger.info(
+        "attn_trace: patched get_manager_for_kv_cache_spec "
+        "(source + %d consumer namespaces: %s)",
+        len(replaced_in), replaced_in,
+    )

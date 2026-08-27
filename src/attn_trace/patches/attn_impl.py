@@ -1,72 +1,65 @@
-"""Patch: per-layer `Attention.__init__` (and subclasses).
+"""Patch: `__init__` on every AttentionLayerBase subclass.
 
-Emits `[ATTN_IMPL_INIT]` after each attention module is fully constructed.
-This shows, for every real layer instance, which backend class was chosen
-and which concrete `impl` subclass ended up handling that layer — i.e. the
-piece that decides forward-time kernels and KV read/write semantics.
-
-`[ATTN_BACKEND_PICK]` only fires once per distinct (head_size, dtype, ...)
-tuple (functools.cache) and `[LAYER_KV_SPEC]` only tells you the spec, not
-the impl. This patch fills the gap between the two.
+Emits `[ATTN_IMPL_INIT]` after each attention/cache module is fully
+constructed. Uses subclass auto-discovery so custom attention classes
+(DeepSeek V4 `DSAAttention`, `AscendCompressorStateCache`,
+`AscendDeepseekV4IndexerCache`, `AscendDeepseekV4SWACache`, etc.) that
+inherit directly from `AttentionLayerBase` and never touch the vanilla
+`Attention` class are still covered.
 """
 
-import importlib
-
 from ..logutil import get_logger
+from . import _scanner
 
 logger = get_logger()
 
-
-# (module path, class name). Skipped silently if missing on this vLLM install.
-# Order matters: base `Attention` first so a subclass that inherits __init__
-# from it is still covered indirectly (though we only wrap classes that
-# *own* __init__).
-_ATTN_CLASSES = [
-    ("vllm.model_executor.layers.attention.attention", "Attention"),
-    ("vllm.model_executor.layers.attention.mla_attention", "MLAAttention"),
-    ("vllm.model_executor.layers.attention.cross_attention", "CrossAttention"),
-    ("vllm.model_executor.layers.attention.chunked_local_attention", "ChunkedLocalAttention"),
-    ("vllm.model_executor.layers.attention.encoder_only_attention", "EncoderOnlyAttention"),
-    ("vllm.model_executor.layers.attention.static_sink_attention", "StaticSinkAttention"),
-]
+_MARKER = "_attn_trace_init_wrapped"
 
 
 def apply() -> None:
-    patched = 0
-    for mod_path, cls_name in _ATTN_CLASSES:
-        try:
-            mod = importlib.import_module(mod_path)
-        except ImportError:
-            continue
-        cls = getattr(mod, cls_name, None)
-        if cls is None:
-            continue
-        # 只 patch 直接定义了 __init__ 的类；纯继承的子类靠父类 patch 生效即可。
-        if "__init__" not in cls.__dict__:
-            continue
-        orig = cls.__dict__["__init__"]
-        if getattr(orig, "_attn_trace_wrapped", False):
-            continue
+    try:
+        existing = _scanner.walk_attention_subclasses()
+    except ImportError as e:
+        logger.warning("attn_trace.attn_impl: %s", e)
+        return
 
-        def _make_wrapper(orig_fn, tag_cls_name):
-            def wrapper(self, *args, **kwargs):
-                orig_fn(self, *args, **kwargs)
-                _emit_impl_log(self, tag_cls_name)
-            wrapper._attn_trace_wrapped = True  # type: ignore[attr-defined]
-            return wrapper
+    patched_now = [c for c in existing if _wrap(c)]
+    if patched_now:
+        logger.info(
+            "attn_trace.attn_impl: wrapped __init__ on %d existing subclasses: %s",
+            len(patched_now), _scanner.unique_class_paths(patched_now),
+        )
+    else:
+        logger.info(
+            "attn_trace.attn_impl: no existing subclass owned __init__ at "
+            "register time (model classes load later)"
+        )
 
-        setattr(cls, "__init__", _make_wrapper(orig, cls_name))
-        patched += 1
-        logger.info("attn_trace: patched %s.%s.__init__", mod_path, cls_name)
+    _scanner.install_subclass_hook(_wrap_and_log)
 
-    if patched == 0:
-        logger.warning(
-            "attn_trace.attn_impl: no attention classes patched — "
-            "vLLM layout may have changed"
+
+def _wrap_and_log(cls) -> None:
+    if _wrap(cls):
+        logger.info(
+            "attn_trace.attn_impl: late-wrapped __init__ on %s.%s",
+            cls.__module__, cls.__name__,
         )
 
 
-def _emit_impl_log(layer, cls_name: str) -> None:
+def _wrap(cls) -> bool:
+    return _scanner.wrap_method_if_defined(
+        cls, "__init__", _make_wrapper, _MARKER,
+    )
+
+
+def _make_wrapper(orig_fn, owner_cls):
+    def wrapper(self, *args, **kwargs):
+        orig_fn(self, *args, **kwargs)
+        _emit(self, owner_cls)
+    return wrapper
+
+
+def _emit(layer, owner_cls) -> None:
     try:
         impl = getattr(layer, "impl", None)
         backend = getattr(layer, "attn_backend", None)
@@ -78,14 +71,14 @@ def _emit_impl_log(layer, cls_name: str) -> None:
                 backend_name = getattr(backend, "__name__", type(backend).__name__)
 
         logger.info(
-            "[ATTN_IMPL_INIT] layer=%s cls=%s "
+            "[ATTN_IMPL_INIT] layer=%s cls=%s.%s "
             "backend=%s backend_cls=%s.%s "
             "impl_cls=%s.%s "
             "num_heads=%s num_kv_heads=%s head_size=%s "
             "sliding_window=%s kv_cache_dtype=%s "
             "attn_type=%s kv_sharing_target=%s",
             getattr(layer, "layer_name", "?"),
-            cls_name,
+            owner_cls.__module__, owner_cls.__name__,
             backend_name,
             getattr(backend, "__module__", "?"),
             getattr(backend, "__name__", "?"),
@@ -100,4 +93,4 @@ def _emit_impl_log(layer, cls_name: str) -> None:
             getattr(layer, "kv_sharing_target_layer_name", None),
         )
     except Exception as e:
-        logger.warning("[ATTN_IMPL_INIT] log failed for %s: %s", cls_name, e)
+        logger.warning("[ATTN_IMPL_INIT] log failed for %s: %s", owner_cls.__name__, e)

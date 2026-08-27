@@ -4,13 +4,13 @@
 
 ## 采样环境
 
-- 采样时间：2026-08-26 16:19–16:22
+- 采样时间：2026-08-26 多轮采样（16:19–16:22 + 17:12–17:17）
 - 运行时：vLLM 0.23.0 + vllm-ascend 0.23.0
 - 部署形态：PD 分离场景下的 P 节点
   - `data_parallel_size = 2`（`EngineCore_DP0` / `EngineCore_DP1`）
   - `tensor_parallel_size = 8`（从 log 里 16 个 Worker pid 与 DP=2 反推）
 - 硬件：Ascend NPU（非 310p）
-- ⚠️ 本次采样的启动配置：`prefix_caching=False`、`connector=False`。**这两个开关的状态严重影响下面分析里"你插件能不能命中"的结论**，见文末"注意事项"。
+- ⚠️ 两次采样的启动配置都是：`prefix_caching=False`、`connector=False`。**这两个开关的状态严重影响下面分析里"你插件能不能命中"的结论**，见文末"注意事项"。
 
 ## 一句话结论
 
@@ -155,9 +155,58 @@ hashes_to_release = req.block_hashes[release_block_index:]
                              cache_config.block_size=8 prefix_caching=False connector=False dcp=1 pcp=1
 ```
 
-## 六、注意事项
+## 六、v0.2.0 抓到的新事实：模型走的是自定义 attention 类，绕过 vLLM 的 Attention 基类
+
+第二次采样（17:12–17:17，attn-trace v0.2.0）把 `[ATTN_IMPL_INIT]` 加进来之后，出现一个意外结果：
+
+| tag | 期望条数 | 实际条数 |
+|---|---:|---:|
+| `[ATTN_BACKEND_PICK]` | 16（每 worker 1 次，functools.cache 去重） | 16 ✓ |
+| `[NPU_ATTN_MAP]` | 16 | 16 ✓ |
+| `[KV_GROUP]` | 14（每 DP 1 汇总 + 6 组明细） | 14 ✓ |
+| `[BLOCK_SIZES]` | 2（每 DP 1 次） | 2 ✓ |
+| **`[LAYER_KV_SPEC]`** | ≥ 168（每层 1 次） | **0** ❌ |
+| **`[ATTN_IMPL_INIT]`** | ≥ 168 × 16 workers | **0** ❌ |
+| **`[KV_MGR_INIT]`** | 6 × 2 DP = 12 | **0** ❌ |
+| **`[KV_STARTUP_SUMMARY]`** | 2 | **0** ❌ |
+
+排查 vllm-ascend 源码后定位到根因 —— DeepSeek V4 Flash 用的是**自定义 attention 类，不继承 vLLM 的 `Attention` / `MLAAttention` 等 6 个基类**：
+
+```
+# vllm/model_executor/layers/attention_layer_base.py
+class AttentionLayerBase(ABC):           # 真正的顶层抽象
+    @abstractmethod def get_attn_backend(self)
+    @abstractmethod def get_kv_cache_spec(self, vllm_config)
+
+# vllm-ascend 侧
+class DSAAttention(nn.Module, AttentionLayerBase):                        # 直继基类
+class AscendCompressorStateCache(CompressorStateCache):                   # 祖父类是 AttentionLayerBase
+class AscendDeepseekV4IndexerCache(DeepseekV4IndexerCache):               # 祖父类是 AttentionLayerBase
+# vllm 侧
+class CompressorStateCache(torch.nn.Module, AttentionLayerBase)
+class DeepseekV4IndexerCache(torch.nn.Module, AttentionLayerBase)
+class DeepseekV4SWACache(torch.nn.Module, AttentionLayerBase)
+```
+
+v0.2.0 只 patch 了 `Attention` / `MLAAttention` / `CrossAttention` /
+`ChunkedLocalAttention` / `EncoderOnlyAttention` / `StaticSinkAttention` 六个类，跟上面 4 个真正被实例化的类**完全没交集** —— 所以 168 层里 0 条日志。
+
+同时期观察到的其它两个 0 条：
+- `[KV_MGR_INIT]` = 0：`get_manager_for_kv_cache_spec` 在 hybrid 场景下被通过 `from ... import` 的方式在**别的 coordinator 模块**里预先绑定，patch 只改了源模块的符号，consumer 已经拿到旧引用。
+- `[KV_STARTUP_SUMMARY]` = 0：**大概率是日志被截断**（info.txt 收在 DP0 `[BLOCK_SIZES]` 17:17:03 那行，warmup 还没跑完）；也可能是最外层 `DPEngineCoreProc.__init__` 才是真正实例化的类，而 v0.2.0 只包了 `EngineCore.__init__`。
+
+### v0.3.0 的修法
+
+- **`[LAYER_KV_SPEC]` / `[ATTN_IMPL_INIT]`**：改成扫 `AttentionLayerBase` 的子孙树；同时在 `AttentionLayerBase.__init_subclass__` 上装钩子，捕捉模型文件加载后动态出现的新子类。
+- **`[KV_MGR_INIT]`**：扫描所有 `vllm.v1.core.*` 模块，把持有旧引用的本地符号一并替换。
+- **`[KV_STARTUP_SUMMARY]`**：patch 链扩到 `EngineCore` + `EngineCoreProc` + `DPEngineCoreProc` 三个 `__init__`，try/finally 保证异常路径也能 emit；实例属性防重复，最外层只输出一次。
+
+装 v0.3.0 后再抓一次，这四个 tag 应该都会出现，届时会补一次 diff 到本文档。
+
+## 七、注意事项
 
 1. **本次采样 `prefix_caching / connector` 都是 False**：直接决定下游插件能否工作，必须在生产复现前确认真实启动开关。
 2. **`hash_block_size` 依赖生产开关**：8 vs 128 决定了插件"完全失效"还是"部分可用"。
 3. **DP0 与 DP1 的 `total_blocks` 差 1**：9161 vs 9162，属于内存 profiling 的正常抖动，不影响结构分析。
 4. **本文件只反映 DeepSeek V4 Flash**：不同版本 DeepSeek（V3、V3.2、R1、V4 Base）的组数/spec 组合会不同，需要各自跑一遍 `attn_trace` 建档。
+5. **要看到 `[LAYER_KV_SPEC]` / `[ATTN_IMPL_INIT]` / `[KV_MGR_INIT]`，必须升到 attn-trace ≥ 0.3.0**。v0.2.0 及以下在此模型上会全部落空。

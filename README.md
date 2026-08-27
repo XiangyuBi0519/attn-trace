@@ -4,7 +4,7 @@
 
 零侵入：不改 vLLM / vllm-ascend 源码，pip 装完由 vLLM 的 `vllm.general_plugins` 入口自动加载。
 
-## 装
+## 安装
 
 在你拉起服务的容器里：
 

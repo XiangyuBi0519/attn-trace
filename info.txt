@@ -1,428 +1,117 @@
-[2026-08-26 17:11:20,295] attn_trace INFO: attn_trace: register() start (pid=307194, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:11:20,415] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:11:20,703] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:11:20,703] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:11:20,703] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:11:20,708] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:11:20,955] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:11:20,955] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:11:20,960] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:11:20,964] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:11:20,968] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:11:20,971] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:11:20,975] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:11:20,979] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:11:20,983] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:11:20,989] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:11:21,415] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:11:21,420] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:11:21,427] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:11:21,432] attn_trace INFO: attn_trace: register() done
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,023] attn_trace INFO: attn_trace: register() start (pid=307349, ATTN_TRACE_LOG_LEVEL=INFO)
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,028] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,030] attn_trace INFO: attn_trace: register() start (pid=307299, ATTN_TRACE_LOG_LEVEL=INFO)
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,033] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,042] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,043] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,051] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,051] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,064] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,064] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,070] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,070] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,073] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,073] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,078] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,078] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,083] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,083] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,088] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,088] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,097] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,097] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,104] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,104] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,108] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,108] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,115] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,115] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,120] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,120] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,123] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,123] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,129] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,129] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,133] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,133] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,140] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-(EngineCore_DP1 pid=307349) [2026-08-26 17:12:00,140] attn_trace INFO: attn_trace: register() done
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,144] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-(EngineCore_DP0 pid=307299) [2026-08-26 17:12:00,149] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:13,521] attn_trace INFO: attn_trace: register() start (pid=307415, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:13,526] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:13,529] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:13,539] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:13,542] attn_trace INFO: attn_trace: register() start (pid=307414, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:13,543] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:13,544] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:13,548] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:13,548] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:13,551] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:13,551] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:13,559] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:13,559] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,571] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,571] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:13,575] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,575] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:13,579] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,579] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,589] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,589] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,592] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,592] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:13,603] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,603] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:13,608] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:13,608] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:13,611] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:13,611] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:13,616] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:13,616] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:13,619] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:13,619] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:13,627] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:13,627] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:13,640] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:13,640] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:13,644] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:13,650] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:13,653] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:26,002] attn_trace INFO: attn_trace: register() start (pid=307513, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:26,006] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:26,008] attn_trace INFO: attn_trace: register() start (pid=307514, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:26,011] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:26,016] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:26,022] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:26,025] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:26,025] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:26,029] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:26,029] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:26,032] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:26,032] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:26,035] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,035] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:26,039] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,039] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:26,043] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,043] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,046] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,046] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:26,051] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:37,990] attn_trace INFO: attn_trace: register() start (pid=307659, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:37,994] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:37,998] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:38,002] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:38,005] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:38,009] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:38,012] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:38,016] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,019] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,023] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,030] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,035] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,038] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:38,042] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:38,045] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:38,049] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:38,052] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:38,055] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:38,066] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:38,069] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:38,219] attn_trace INFO: attn_trace: register() start (pid=307658, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:38,221] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:38,223] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:38,227] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:38,230] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:38,234] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:38,239] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:38,243] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,246] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,249] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,252] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,256] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:38,259] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:38,264] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:38,267] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:38,270] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:38,275] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:38,282] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:38,286] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:38,289] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:49,967] attn_trace INFO: attn_trace: register() start (pid=307803, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:49,971] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:49,974] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:49,977] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:49,983] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:49,986] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:49,990] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:49,993] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:49,996] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:49,999] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,003] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,006] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,010] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:50,014] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:50,019] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:50,023] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:50,027] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:50,030] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:50,034] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:50,037] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:12:50,151] attn_trace INFO: attn_trace: register() start (pid=307807, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:12:50,154] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:12:50,157] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:12:50,160] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:12:50,164] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:12:50,167] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:12:50,171] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:12:50,174] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,179] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,182] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,187] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,200] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:12:50,212] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:12:50,216] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:12:50,220] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:12:50,223] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:12:50,230] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:12:50,233] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:12:50,247] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:12:50,250] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:02,021] attn_trace INFO: attn_trace: register() start (pid=307951, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:02,036] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:02,038] attn_trace INFO: attn_trace: register() start (pid=307955, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:02,054] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:02,055] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:02,064] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:02,064] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:02,070] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:02,070] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:02,079] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:02,079] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:02,101] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:02,101] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:02,105] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:02,105] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,110] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,110] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,118] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,118] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,125] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,125] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,129] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,129] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,141] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:02,141] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:02,148] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:02,148] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:02,151] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:02,151] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:02,155] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:02,155] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:02,173] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:02,173] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:02,180] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:02,180] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:02,195] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:02,195] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:02,208] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:02,208] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:02,215] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:14,348] attn_trace INFO: attn_trace: register() start (pid=308100, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:14,351] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:14,354] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:14,358] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:14,363] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:14,367] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:14,374] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:14,377] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,381] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,385] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,390] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,393] attn_trace INFO: attn_trace: register() start (pid=308101, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:14,396] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,397] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:14,400] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:14,400] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:14,404] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:14,404] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:14,415] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:14,415] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:14,418] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:14,418] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:14,429] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:14,429] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:14,433] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:14,433] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,436] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,436] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:14,440] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,440] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:14,444] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,447] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:14,460] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:14,466] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:14,471] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:14,476] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:14,480] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:14,483] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:14,487] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:14,494] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:27,280] attn_trace INFO: attn_trace: register() start (pid=308246, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:27,285] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:27,287] attn_trace INFO: attn_trace: register() start (pid=308247, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:27,289] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:27,290] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:27,303] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:27,303] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:27,303] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:27,303] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:27,303] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:27,311] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:27,311] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:27,324] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:27,324] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,332] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,332] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:27,337] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,337] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,343] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,343] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,347] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,347] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,350] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,350] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:27,354] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:27,354] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:27,358] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:27,358] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:27,361] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:27,361] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:27,365] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:27,365] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:27,372] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:27,372] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:27,377] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:27,377] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:27,381] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:27,381] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:27,396] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:27,399] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:39,934] attn_trace INFO: attn_trace: register() start (pid=308395, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:39,934] attn_trace INFO: attn_trace: register() start (pid=308394, ATTN_TRACE_LOG_LEVEL=INFO)
-[2026-08-26 17:13:39,938] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:39,938] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
-[2026-08-26 17:13:39,941] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:39,941] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
-[2026-08-26 17:13:39,945] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:39,945] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
-[2026-08-26 17:13:39,948] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:39,948] attn_trace INFO: attn_trace: patched EngineCore.__init__ (summary)
-[2026-08-26 17:13:39,952] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:39,955] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:39,955] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec
-[2026-08-26 17:13:39,959] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,959] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.get_kv_cache_spec
-[2026-08-26 17:13:39,962] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,962] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,966] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,966] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,973] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,973] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,976] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,976] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,980] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:39,980] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.get_kv_cache_spec
-[2026-08-26 17:13:39,987] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:39,987] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.attention.Attention.__init__
-[2026-08-26 17:13:39,991] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:39,991] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.mla_attention.MLAAttention.__init__
-[2026-08-26 17:13:39,995] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:39,995] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.cross_attention.CrossAttention.__init__
-[2026-08-26 17:13:39,998] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:39,998] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention.__init__
-[2026-08-26 17:13:40,002] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention.__init__
-[2026-08-26 17:13:40,002] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:40,007] attn_trace INFO: attn_trace: patched vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention.__init__
-[2026-08-26 17:13:40,007] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:40,011] attn_trace INFO: attn_trace: register() done
-[2026-08-26 17:13:40,012] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
-[2026-08-26 17:13:40,015] attn_trace INFO: attn_trace: register() done
-(Worker pid=307415) [2026-08-26 17:13:44,275] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307415) [2026-08-26 17:13:44,283] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=308395) [2026-08-26 17:13:44,366] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307513) [2026-08-26 17:13:44,367] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=308247) [2026-08-26 17:13:44,367] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=308395) [2026-08-26 17:13:44,370] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307658) [2026-08-26 17:13:44,370] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=308246) [2026-08-26 17:13:44,377] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307513) [2026-08-26 17:13:44,399] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=308247) [2026-08-26 17:13:44,407] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307658) [2026-08-26 17:13:44,417] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=308246) [2026-08-26 17:13:44,424] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307514) [2026-08-26 17:13:44,445] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=308394) [2026-08-26 17:13:44,456] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307803) [2026-08-26 17:13:44,457] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307414) [2026-08-26 17:13:44,457] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307807) [2026-08-26 17:13:44,467] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307955) [2026-08-26 17:13:44,481] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307951) [2026-08-26 17:13:44,487] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307659) [2026-08-26 17:13:44,493] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=308100) [2026-08-26 17:13:44,494] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=308101) [2026-08-26 17:13:44,503] attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
-(Worker pid=307514) [2026-08-26 17:13:44,552] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=308394) [2026-08-26 17:13:44,565] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307803) [2026-08-26 17:13:44,573] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307807) [2026-08-26 17:13:44,578] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307955) [2026-08-26 17:13:44,578] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307951) [2026-08-26 17:13:44,582] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307414) [2026-08-26 17:13:44,586] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=307659) [2026-08-26 17:13:44,593] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=308100) [2026-08-26 17:13:44,597] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(Worker pid=308101) [2026-08-26 17:13:44,597] attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,479] attn_trace INFO: [KV_GROUP] total_groups=6 total_blocks=9161
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,483] attn_trace INFO: [KV_GROUP] idx=0 spec=AscendMLAAttentionSpec block_size=128 num_layers=42 num_kv_heads=1 head_size=128 dtype=torch.int8 sliding_window=None attention_chunk_size=None sample_layers=['model.layers.2.self_attn.indexer.k_cache', 'model.layers.2.self_attn.attn', 'model.layers.4.self_attn.indexer.k_cache', '...']
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,487] attn_trace INFO: [KV_GROUP] idx=1 spec=AscendMLAAttentionSpec block_size=128 num_layers=20 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None sample_layers=['model.layers.3.self_attn.attn', 'model.layers.5.self_attn.attn', 'model.layers.7.self_attn.attn', '...']
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,491] attn_trace INFO: [KV_GROUP] idx=2 spec=AscendSlidingWindowMLASpec block_size=128 num_layers=22 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.0.self_attn.swa_cache', 'model.layers.2.self_attn.swa_cache', 'model.layers.4.self_attn.swa_cache', '...']
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,494] attn_trace INFO: [KV_GROUP] idx=3 spec=AscendSlidingWindowMLASpec block_size=128 num_layers=22 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.1.self_attn.swa_cache', 'model.layers.3.self_attn.swa_cache', 'model.layers.5.self_attn.swa_cache', '...']
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,501] attn_trace INFO: [KV_GROUP] idx=4 spec=AscendSlidingWindowMLASpec block_size=8 num_layers=42 num_kv_heads=1 head_size=2048 dtype=torch.float32 sliding_window=8 attention_chunk_size=None sample_layers=['model.layers.2.self_attn.compressor.state_cache', 'model.layers.2.self_attn.indexer.compressor.state_cache', 'model.layers.4.self_attn.compressor.state_cache', '...']
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:30,505] attn_trace INFO: [KV_GROUP] idx=5 spec=AscendSlidingWindowMLASpec block_size=32 num_layers=20 num_kv_heads=1 head_size=1024 dtype=torch.float32 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.3.self_attn.compressor.state_cache', 'model.layers.5.self_attn.compressor.state_cache', 'model.layers.7.self_attn.compressor.state_cache', '...']
-(EngineCore_DP1 pid=307349) [2026-08-26 17:16:31,174] attn_trace INFO: [BLOCK_SIZES] scheduler_block_size=128 hash_block_size=128 num_groups=6 group_block_sizes=[128, 128, 128, 128, 8, 32] cache_config.block_size=8 prefix_caching=False connector=False dcp=1 pcp=1
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,422] attn_trace INFO: [KV_GROUP] total_groups=6 total_blocks=9162
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,426] attn_trace INFO: [KV_GROUP] idx=0 spec=AscendMLAAttentionSpec block_size=128 num_layers=42 num_kv_heads=1 head_size=128 dtype=torch.int8 sliding_window=None attention_chunk_size=None sample_layers=['model.layers.2.self_attn.indexer.k_cache', 'model.layers.2.self_attn.attn', 'model.layers.4.self_attn.indexer.k_cache', '...']
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,430] attn_trace INFO: [KV_GROUP] idx=1 spec=AscendMLAAttentionSpec block_size=128 num_layers=20 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None sample_layers=['model.layers.3.self_attn.attn', 'model.layers.5.self_attn.attn', 'model.layers.7.self_attn.attn', '...']
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,433] attn_trace INFO: [KV_GROUP] idx=2 spec=AscendSlidingWindowMLASpec block_size=128 num_layers=22 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.0.self_attn.swa_cache', 'model.layers.2.self_attn.swa_cache', 'model.layers.4.self_attn.swa_cache', '...']
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,439] attn_trace INFO: [KV_GROUP] idx=3 spec=AscendSlidingWindowMLASpec block_size=128 num_layers=22 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.1.self_attn.swa_cache', 'model.layers.3.self_attn.swa_cache', 'model.layers.5.self_attn.swa_cache', '...']
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,446] attn_trace INFO: [KV_GROUP] idx=4 spec=AscendSlidingWindowMLASpec block_size=8 num_layers=42 num_kv_heads=1 head_size=2048 dtype=torch.float32 sliding_window=8 attention_chunk_size=None sample_layers=['model.layers.2.self_attn.compressor.state_cache', 'model.layers.2.self_attn.indexer.compressor.state_cache', 'model.layers.4.self_attn.compressor.state_cache', '...']
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:02,451] attn_trace INFO: [KV_GROUP] idx=5 spec=AscendSlidingWindowMLASpec block_size=32 num_layers=20 num_kv_heads=1 head_size=1024 dtype=torch.float32 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.3.self_attn.compressor.state_cache', 'model.layers.5.self_attn.compressor.state_cache', 'model.layers.7.self_attn.compressor.state_cache', '...']
-(EngineCore_DP0 pid=307299) [2026-08-26 17:17:03,119] attn_trace INFO: [BLOCK_SIZES] scheduler_block_size=128 hash_block_size=128 num_groups=6 group_block_sizes=[128, 128, 128, 128, 8, 32] cache_config.block_size=8 prefix_caching=False connector=False dcp=1 pcp=1
+[2026-08-27 09:30:43,585] attn_trace INFO: attn_trace: register() start (pid=368265, ATTN_TRACE_LOG_LEVEL=INFO)
+[2026-08-27 09:30:43,589] attn_trace INFO: attn_trace: patched vllm.v1.attention.selector._cached_get_attn_backend
+[2026-08-27 09:30:43,595] attn_trace INFO: attn_trace: patched resolve_kv_cache_block_sizes
+[2026-08-27 09:30:43,866] attn_trace INFO: attn_trace: patched EngineCore._initialize_kv_caches
+[2026-08-27 09:30:43,866] attn_trace INFO: attn_trace: patched EngineCore.__init__ chain (EngineCore, EngineCoreProc, DPEngineCoreProc)
+[2026-08-27 09:30:43,872] attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec (source + 0 consumer namespaces: [])
+[2026-08-27 09:30:43,873] attn_trace INFO: attn_trace.layer_spec: no existing subclass owned get_kv_cache_spec at register time (this is normal — model files load later)
+[2026-08-27 09:30:43,876] attn_trace INFO: attn_trace: installed __init_subclass__ hook on AttentionLayerBase
+[2026-08-27 09:30:43,880] attn_trace INFO: attn_trace.attn_impl: no existing subclass owned __init__ at register time (model classes load later)
+[2026-08-27 09:30:43,885] attn_trace INFO: attn_trace: patched NPUPlatform.get_attn_backend_cls
+[2026-08-27 09:30:43,888] attn_trace INFO: attn_trace: register() done
+[2026-08-27 09:30:44,112] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.attention.attention.Attention
+[2026-08-27 09:30:44,113] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention
+[2026-08-27 09:30:44,119] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.attention.cross_attention.CrossAttention
+[2026-08-27 09:30:44,123] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention
+[2026-08-27 09:30:44,131] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.attention.mla_attention.MLAAttention
+[2026-08-27 09:30:44,154] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention
+[2026-08-27 09:30:44,713] (APIServer pid=368265) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.models.deepseek_v4.compressor.CompressorStateCache
+[2026-08-27 09:30:44,714] (APIServer pid=368265) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.v1.attention.backends.mla.sparse_swa.DeepseekV4SWACache
+[2026-08-27 09:30:44,721] (APIServer pid=368265) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.models.deepseek_v4.attention.DeepseekV4Attention
+[2026-08-27 09:30:44,722] (APIServer pid=368265) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.models.deepseek_v4.attention.DeepseekV4IndexerCache
+[2026-08-27 09:30:44,736] (APIServer pid=368265) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.models.deepseek_v2.DeepseekV32IndexerCache
+[2026-08-27 09:31:22,647] (EngineCore_DP1 pid=368421) attn_trace INFO: attn_trace: patched get_manager_for_kv_cache_spec (source + 1 consumer namespaces: ['vllm.v1.core.kv_cache_coordinator'])
+[2026-08-27 09:31:22,648] (EngineCore_DP1 pid=368421) attn_trace INFO: attn_trace.layer_spec: wrapped get_kv_cache_spec on 6 existing subclasses: ['vllm.model_executor.layers.attention.attention.Attention', 'vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention', 'vllm.model_executor.layers.attention.cross_attention.CrossAttention', 'vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention', 'vllm.model_executor.layers.attention.mla_attention.MLAAttention', 'vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention']
+[2026-08-27 09:31:22,648] (EngineCore_DP1 pid=368421) attn_trace INFO: attn_trace.attn_impl: wrapped __init__ on 6 existing subclasses: ['vllm.model_executor.layers.attention.attention.Attention', 'vllm.model_executor.layers.attention.chunked_local_attention.ChunkedLocalAttention', 'vllm.model_executor.layers.attention.cross_attention.CrossAttention', 'vllm.model_executor.layers.attention.encoder_only_attention.EncoderOnlyAttention', 'vllm.model_executor.layers.attention.mla_attention.MLAAttention', 'vllm.model_executor.layers.attention.static_sink_attention.StaticSinkAttention']
+[2026-08-27 09:31:36,197] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.layers.mamba.abstract.MambaBase
+[2026-08-27 09:31:36,198] attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm.model_executor.models.extract_hidden_states.CacheOnlyAttentionLayer
+[2026-08-27 09:33:06,919] (Worker pid=368487) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:06,927] (Worker pid=368487) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:06,981] (Worker pid=368586) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:06,987] (Worker pid=368732) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:06,992] (Worker pid=368880) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:06,998] (Worker pid=368486) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,022] (Worker pid=368728) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,036] (Worker pid=369027) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,040] (Worker pid=369173) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,059] (Worker pid=368586) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,070] (Worker pid=369322) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,074] (Worker pid=368732) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,086] (Worker pid=368880) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,089] (Worker pid=368486) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,114] (Worker pid=368879) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,098] (Worker pid=368728) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,099] (Worker pid=368587) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,109] (Worker pid=369469) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,110] (Worker pid=369027) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,111] (Worker pid=369026) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,114] (Worker pid=369173) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,119] (Worker pid=369322) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,121] (Worker pid=369468) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,125] (Worker pid=369174) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,127] (Worker pid=369321) attn_trace INFO: [NPU_ATTN_MAP] selected_backend=None key=(mla=True,sparse=False) use_compress=False is_310p=False -> vllm_ascend.attention.mla_v1.AscendMLABackend
+[2026-08-27 09:33:07,207] (Worker pid=369026) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,211] (Worker pid=368879) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,236] (Worker pid=368587) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,248] (Worker pid=369469) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,279] (Worker pid=369468) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,298] (Worker pid=369174) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,306] (Worker pid=369321) attn_trace INFO: [ATTN_BACKEND_PICK] backend_cls=vllm_ascend.attention.mla_v1.AscendMLABackend selected=None num_heads=None required_kv_layout=None attn_cfg=AttentionSelectorConfig(head_size=0, dtype=torch.bfloat16, kv_cache_dtype=None, block_size=128, use_mla=True, has_sink=False, use_sparse=False, use_mm_prefix=False, use_per_head_quant_scales=False, attn_type=AttentionType.DECODER, use_non_causal=False, use_batch_invariant=False, use_kv_connector=False)
+[2026-08-27 09:33:07,312] (Worker pid=368487) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm_ascend.models.layer.attention.layer.DSAAttention
+[2026-08-27 09:33:07,395] (Worker pid=368487) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm_ascend.models.deepseek_v4.AscendCompressorStateCache
+[2026-08-27 09:33:07,437] (Worker pid=368487) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm_ascend.models.deepseek_v4.AscendDeepseekV4IndexerCache
+[2026-08-27 09:33:07,443] (Worker pid=368487) attn_trace INFO: attn_trace.layer_spec: late-wrapped get_kv_cache_spec on vllm_ascend.models.deepseek_v4.AscendDeepseekV4SWACache
+[2026-08-27 09:34:49,515] (Worker_DP0_TP6_EP6 pid=369322) attn_trace INFO: [LAYER_KV_SPEC] layer=? cls=vllm_ascend.models.deepseek_v4.AscendDeepseekV4SWACache spec=AscendSlidingWindowMLASpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None kv_dtype=None attn_type=None use_mla=None
+[2026-08-27 09:34:57,971] (Worker_DP1_TP1_EP9 pid=368587) attn_trace INFO: [LAYER_KV_SPEC] layer=? cls=vllm_ascend.models.deepseek_v4.AscendCompressorStateCache spec=AscendSlidingWindowMLASpec block_size=8 num_kv_heads=1 head_size=2048 dtype=torch.float32 sliding_window=8 attention_chunk_size=None kv_dtype=None attn_type=None use_mla=None
+[2026-08-27 09:34:57,985] (Worker_DP1_TP1_EP9 pid=368587) attn_trace INFO: [LAYER_KV_SPEC] layer=? cls=vllm_ascend.models.deepseek_v4.AscendDeepseekV4IndexerCache spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=128 dtype=torch.int8 sliding_window=None attention_chunk_size=None kv_dtype=None attn_type=None use_mla=None
+[2026-08-27 09:34:57,985] (Worker_DP1_TP1_EP9 pid=368587) attn_trace INFO: [LAYER_KV_SPEC] layer=? cls=vllm_ascend.models.deepseek_v4.AscendCompressorStateCache spec=AscendSlidingWindowMLASpec block_size=8 num_kv_heads=1 head_size=512 dtype=torch.float32 sliding_window=8 attention_chunk_size=None kv_dtype=None attn_type=None use_mla=None
+[2026-08-27 09:34:57,985] (Worker_DP1_TP2_EP10 pid=368728) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.2.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,985] (Worker_DP1_TP2_EP10 pid=368728) attn_trace INFO: [LAYER_KV_SPEC] layer=? cls=vllm_ascend.models.deepseek_v4.AscendCompressorStateCache spec=AscendSlidingWindowMLASpec block_size=32 num_kv_heads=1 head_size=1024 dtype=torch.float32 sliding_window=128 attention_chunk_size=None kv_dtype=None attn_type=None use_mla=None
+[2026-08-27 09:34:57,986] (Worker_DP1_TP2_EP10 pid=368728) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.3.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,986] (Worker_DP1_TP2_EP10 pid=368728) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.4.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,987] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.5.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,987] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.6.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,988] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.7.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,988] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.8.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,989] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.9.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,989] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.10.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,990] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.11.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,990] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.12.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,991] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.13.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,992] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.14.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,992] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.15.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,993] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.16.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,993] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.17.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,994] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.18.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,994] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.19.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,995] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.20.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,995] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.21.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,996] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.22.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,997] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.23.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,997] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.24.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,998] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.25.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,998] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.26.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,999] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.27.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:57,999] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.28.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,000] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.29.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,000] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.30.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,001] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.31.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,002] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.32.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,002] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.33.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,003] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.34.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,003] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.35.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,004] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.36.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,004] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.37.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,005] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.38.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,005] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.39.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,006] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.40.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,007] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.41.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:34:58,007] (Worker_DP1_TP3_EP11 pid=368879) attn_trace INFO: [LAYER_KV_SPEC] layer=model.layers.42.self_attn.attn cls=vllm_ascend.models.layer.attention.layer.DSAAttention spec=AscendMLAAttentionSpec block_size=128 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None kv_dtype=bfloat16 attn_type=None use_mla=None
+[2026-08-27 09:35:55,369] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] total_groups=6 total_blocks=9162
+[2026-08-27 09:35:55,380] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] idx=0 spec=vllm_ascend.core.kv_cache_interface.AscendMLAAttentionSpec block_size=128 num_layers=42 num_kv_heads=1 head_size=128 dtype=torch.int8 sliding_window=None attention_chunk_size=None sample_layers=['model.layers.2.self_attn.indexer.k_cache', 'model.layers.2.self_attn.attn', 'model.layers.4.self_attn.indexer.k_cache', '...']
+[2026-08-27 09:35:55,384] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] idx=1 spec=vllm_ascend.core.kv_cache_interface.AscendMLAAttentionSpec block_size=128 num_layers=20 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=None attention_chunk_size=None sample_layers=['model.layers.3.self_attn.attn', 'model.layers.5.self_attn.attn', 'model.layers.7.self_attn.attn', '...']
+[2026-08-27 09:35:55,391] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] idx=2 spec=vllm_ascend.core.kv_cache_interface.AscendSlidingWindowMLASpec block_size=128 num_layers=22 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.0.self_attn.swa_cache', 'model.layers.2.self_attn.swa_cache', 'model.layers.4.self_attn.swa_cache', '...']
+[2026-08-27 09:35:55,400] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] idx=3 spec=vllm_ascend.core.kv_cache_interface.AscendSlidingWindowMLASpec block_size=128 num_layers=22 num_kv_heads=1 head_size=512 dtype=torch.bfloat16 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.1.self_attn.swa_cache', 'model.layers.3.self_attn.swa_cache', 'model.layers.5.self_attn.swa_cache', '...']
+[2026-08-27 09:35:55,405] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] idx=4 spec=vllm_ascend.core.kv_cache_interface.AscendSlidingWindowMLASpec block_size=8 num_layers=42 num_kv_heads=1 head_size=2048 dtype=torch.float32 sliding_window=8 attention_chunk_size=None sample_layers=['model.layers.2.self_attn.compressor.state_cache', 'model.layers.2.self_attn.indexer.compressor.state_cache', 'model.layers.4.self_attn.compressor.state_cache', '...']
+[2026-08-27 09:35:55,410] (EngineCore_DP1 pid=368421) attn_trace INFO: [KV_GROUP] idx=5 spec=vllm_ascend.core.kv_cache_interface.AscendSlidingWindowMLASpec block_size=32 num_layers=20 num_kv_heads=1 head_size=1024 dtype=torch.float32 sliding_window=128 attention_chunk_size=None sample_layers=['model.layers.3.self_attn.compressor.state_cache', 'model.layers.5.self_attn.compressor.state_cache', 'model.layers.7.self_attn.compressor.state_cache', '...']
+[2026-08-27 09:35:56,097] (EngineCore_DP1 pid=368421) attn_trace INFO: [BLOCK_SIZES] scheduler_block_size=128 hash_block_size=128 num_groups=6 group_block_sizes=[128, 128, 128, 128, 8, 32] cache_config.block_size=8 prefix_caching=False connector=False dcp=1 pcp=1

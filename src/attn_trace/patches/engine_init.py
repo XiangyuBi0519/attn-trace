@@ -85,11 +85,37 @@ def _patch_initialize_kv_caches() -> None:
     orig = EngineCore._initialize_kv_caches
 
     def wrapped(self, vllm_config):
+        # 诊断：确认 EngineCore.__init__ 现在是不是还是我们的 wrapper
+        # （多 plugin 场景下常见被后加载的 plugin 覆写），不影响业务逻辑
+        try:
+            cur_init = EngineCore.__dict__.get("__init__")
+            still_ours = getattr(cur_init, "_attn_trace_init_wrapped", False)
+            logger.info(
+                "[INIT_WRAPPER_STATUS] EngineCore.__init__ still_ours=%s "
+                "current=%s.%s",
+                still_ours,
+                getattr(cur_init, "__module__", "?"),
+                getattr(cur_init, "__qualname__", getattr(cur_init, "__name__", "?")),
+            )
+        except Exception:
+            pass
+
         result = orig(self, vllm_config)
         try:
             _log_kv_groups(result)
         except Exception as e:
             logger.warning("[KV_GROUP] log failed: %s", e)
+        # summary 从这里 emit —— _initialize_kv_caches 是我们能确认稳定生效的
+        # patch 点，与 __init__ 是否被别的 plugin 覆写无关。
+        try:
+            _log_startup_summary(
+                self,
+                wrapper_stage="initialize_kv_caches",
+                failed=False,
+                kv_cache_config=result,
+            )
+        except Exception as e:
+            logger.warning("[KV_STARTUP_SUMMARY] log failed at init_kv_caches: %s", e)
         return result
 
     EngineCore._initialize_kv_caches = wrapped
@@ -199,9 +225,13 @@ def _patch_engine_core_init_chain() -> None:
 
 def _log_startup_summary(
     engine_core, wrapper_stage: str = "?", failed: bool = False,
+    kv_cache_config=None,
 ) -> None:
     scheduler = getattr(engine_core, "scheduler", None)
-    kv_cache_config = getattr(scheduler, "kv_cache_config", None) if scheduler else None
+    # 优先用调用方传进来的 kv_cache_config（_initialize_kv_caches 返回值），
+    # 否则回退到 scheduler.kv_cache_config（EngineCore.__init__ 结尾场景）
+    if kv_cache_config is None:
+        kv_cache_config = getattr(scheduler, "kv_cache_config", None) if scheduler else None
     groups = getattr(kv_cache_config, "kv_cache_groups", None) or []
 
     spec_hist = Counter(type(g.kv_cache_spec).__name__ for g in groups)

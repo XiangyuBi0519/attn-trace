@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "attn-trace"
-version = "0.3.1"
+version = "0.3.2"
 description = "Startup-time attention backend + KV cache spec logger for vLLM (works with vllm-ascend)"
 readme = "README.md"
 requires-python = ">=3.9"

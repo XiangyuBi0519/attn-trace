@@ -23,8 +23,10 @@ pip install ./attn_trace          # 或 pip install /path/to/attn_trace-0.1.0-*.
 | `[KV_GROUP]` | `EngineCore._initialize_kv_caches` 末尾 | 最终归并出的每个 KV cache group（spec 类、block_size、层数、样例 layer 名） |
 | `[BLOCK_SIZES]` | `resolve_kv_cache_block_sizes` | scheduler_block_size / hash_block_size / 每组 block_size —— **决定你插件按 hash 重算 block 时对不对得上** |
 | `[KV_MGR_INIT]` | `get_manager_for_kv_cache_spec` | 每个组实际用哪个 Manager 类（FullAttention / SlidingWindow / ChunkedLocal / Mamba / ...） |
-| `[ENGINE_INIT_ENTER]` | 每层 `EngineCore.__init__` 入口 | 诊断行，确认 wrapper 被调到；带 `wrapper_stage=EngineCore/EngineCoreProc/DPEngineCoreProc` |
-| `[KV_STARTUP_SUMMARY]` | 每层 `EngineCore.__init__` 出口（try/finally） | **≥ v0.3.1** 起改成每一层都 emit 一行，带 `wrapper_stage` 字段。grep `wrapper_stage=DPEngineCoreProc`（或你实际的最外层类）拿到最终状态；`engine_class=` 是真实实例化类。 |
+| `[ENGINE_INIT_ENTER]` | 每层 `EngineCore.__init__` 入口 | 诊断行，确认 wrapper 被调到；带 `wrapper_stage=EngineCore/EngineCoreProc/DPEngineCoreProc`。**多 plugin 共存**时可能被后加载的 patcher 型 plugin（如 msserviceprofiler / arctic_inference）覆写，此时该行不会 fire —— 见下面 `[INIT_WRAPPER_STATUS]` |
+| `[INIT_WRAPPER_STATUS]` | `EngineCore._initialize_kv_caches` 入口 | **≥ v0.3.2** 诊断行，运行时反查 `EngineCore.__init__` 现在是不是还是我们的 wrapper。`still_ours=False` 说明有 plugin 后加载覆写了我们的 patch |
+| `[KV_STARTUP_SUMMARY]` | `EngineCore._initialize_kv_caches` 出口（**≥ v0.3.2**） | 从 `EngineCore.__init__` 改到 `_initialize_kv_caches` 出口 —— 后者是纯函数 patch，任何 plugin 都覆写不掉。带 `wrapper_stage=initialize_kv_caches`。缺 `managers=` 字段（还没到 Scheduler.__init__），需要跟 `[KV_MGR_INIT]` 一起看 |
+| `[KV_MGR_INIT]` | `SingleTypeKVCacheManager` 全部子孙类的 `__init__`（**≥ v0.3.2**） | 从"patch 工厂函数"改到"patch base 类子孙树" —— 无论 Ascend hybrid coordinator 走哪条工厂路径，只要 Manager 被实例化就 emit 一行 |
 
 ## 环境变量
 
@@ -47,7 +49,7 @@ register()
 
 抓到过的模型 KV 布局观测记录放在 [`docs/models/`](docs/models/) 里，方便跨模型对比。新增模型跑完后欢迎把 `[KV_STARTUP_SUMMARY]` / `[KV_GROUP]` / `[BLOCK_SIZES]` 三段整理成同格式 md 补进去。
 
-- [DeepSeek V4 Flash](docs/models/deepseek-v4-flash.md) —— MLA + Sparse Attention（indexer + compressor）+ SWA，6 组 hybrid KV
+- [DeepSeek V4 Flash](docs/models/deepseek-v4-flash.md) —— **DSA (Dynamic Sparse Attention) + Indexer + Compressor + SWA**，6 组 hybrid KV，主 attention 走 `AscendDSABackend / AscendDSACPImpl`
 
 ## 与 `kv_cache_affinity` 的关系
 

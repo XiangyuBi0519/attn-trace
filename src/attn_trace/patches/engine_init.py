@@ -162,6 +162,11 @@ def _patch_engine_core_init_chain() -> None:
 
         def _make_wrapper(orig_fn, tag):
             def wrapper(self, *args, **kwargs):
+                # 进入 emit 一次（确认 wrapper 有真的被调），退出 emit 一次
+                # summary。之前"只在最外层 tag 匹配时 emit"的策略下如果
+                # 匹配逻辑或 finally 出问题就一行都看不到；现在每层都 emit，
+                # 用户 grep engine_class=DPEngineCoreProc 拿最外层那条即可。
+                logger.info("[ENGINE_INIT_ENTER] wrapper_stage=%s cls=%s", tag, type(self).__name__)
                 exc = None
                 try:
                     orig_fn(self, *args, **kwargs)
@@ -169,23 +174,17 @@ def _patch_engine_core_init_chain() -> None:
                     exc = e
                     raise
                 finally:
-                    # 每个 init 链只 emit 一次 summary，由最外层类（真正被
-                    # 实例化的那个）负责。用一个实例属性做标记；如果整条链上
-                    # 没人（比如没 patch 到最外层类）emit，异常场景下由最深
-                    # 层兜底 emit 一次，避免完全没输出。
-                    should_emit = False
-                    if type(self).__name__ == tag:
-                        should_emit = True
-                    elif exc is not None and not getattr(
-                        self, "_attn_trace_summary_emitted", False
-                    ):
-                        should_emit = True
-                    if should_emit:
-                        try:
-                            _log_startup_summary(self, failed=exc is not None)
-                            self._attn_trace_summary_emitted = True
-                        except Exception as e2:
-                            logger.warning("[KV_STARTUP_SUMMARY] log failed: %s", e2)
+                    try:
+                        _log_startup_summary(
+                            self,
+                            wrapper_stage=tag,
+                            failed=exc is not None,
+                        )
+                    except Exception as e2:
+                        logger.warning(
+                            "[KV_STARTUP_SUMMARY] log failed at stage=%s: %s",
+                            tag, e2,
+                        )
             wrapper._attn_trace_init_wrapped = True  # type: ignore[attr-defined]
             return wrapper
 
@@ -198,7 +197,9 @@ def _patch_engine_core_init_chain() -> None:
     )
 
 
-def _log_startup_summary(engine_core, failed: bool = False) -> None:
+def _log_startup_summary(
+    engine_core, wrapper_stage: str = "?", failed: bool = False,
+) -> None:
     scheduler = getattr(engine_core, "scheduler", None)
     kv_cache_config = getattr(scheduler, "kv_cache_config", None) if scheduler else None
     groups = getattr(kv_cache_config, "kv_cache_groups", None) or []
@@ -219,12 +220,14 @@ def _log_startup_summary(engine_core, failed: bool = False) -> None:
     parallel_config = getattr(vllm_config, "parallel_config", None)
 
     logger.info(
-        "[KV_STARTUP_SUMMARY] engine_class=%s failed_before_return=%s "
+        "[KV_STARTUP_SUMMARY] wrapper_stage=%s engine_class=%s "
+        "failed_before_return=%s "
         "num_groups=%d specs=%s managers=%s "
         "total_layers=%d num_blocks=%s hash_block_size=%s "
         "prefix_caching=%s has_kv_connector=%s "
         "data_parallel_size=%s tensor_parallel_size=%s "
         "pipeline_parallel_size=%s",
+        wrapper_stage,
         type(engine_core).__name__,
         failed,
         len(groups),

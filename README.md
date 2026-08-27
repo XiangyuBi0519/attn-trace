@@ -23,7 +23,8 @@ pip install ./attn_trace          # 或 pip install /path/to/attn_trace-0.1.0-*.
 | `[KV_GROUP]` | `EngineCore._initialize_kv_caches` 末尾 | 最终归并出的每个 KV cache group（spec 类、block_size、层数、样例 layer 名） |
 | `[BLOCK_SIZES]` | `resolve_kv_cache_block_sizes` | scheduler_block_size / hash_block_size / 每组 block_size —— **决定你插件按 hash 重算 block 时对不对得上** |
 | `[KV_MGR_INIT]` | `get_manager_for_kv_cache_spec` | 每个组实际用哪个 Manager 类（FullAttention / SlidingWindow / ChunkedLocal / Mamba / ...） |
-| `[KV_STARTUP_SUMMARY]` | `EngineCore.__init__` 末尾 | 整机汇总：几组、每组几层、hash_block_size、prefix caching / kv connector 开关 |
+| `[ENGINE_INIT_ENTER]` | 每层 `EngineCore.__init__` 入口 | 诊断行，确认 wrapper 被调到；带 `wrapper_stage=EngineCore/EngineCoreProc/DPEngineCoreProc` |
+| `[KV_STARTUP_SUMMARY]` | 每层 `EngineCore.__init__` 出口（try/finally） | **≥ v0.3.1** 起改成每一层都 emit 一行，带 `wrapper_stage` 字段。grep `wrapper_stage=DPEngineCoreProc`（或你实际的最外层类）拿到最终状态；`engine_class=` 是真实实例化类。 |
 
 ## 环境变量
 

@@ -201,7 +201,31 @@ v0.2.0 只 patch 了 `Attention` / `MLAAttention` / `CrossAttention` /
 - **`[KV_MGR_INIT]`**：扫描所有 `vllm.v1.core.*` 模块，把持有旧引用的本地符号一并替换。
 - **`[KV_STARTUP_SUMMARY]`**：patch 链扩到 `EngineCore` + `EngineCoreProc` + `DPEngineCoreProc` 三个 `__init__`，try/finally 保证异常路径也能 emit；实例属性防重复，最外层只输出一次。
 
-装 v0.3.0 后再抓一次，这四个 tag 应该都会出现，届时会补一次 diff 到本文档。
+### v0.3.0 实测结果（第二次抓取，2026-08-27 09:30-09:35）
+
+- ✅ **`[LAYER_KV_SPEC]`** × 46 fire — 子类扫描 + hook 生效。Late-wrap 捕捉到 15+ 个类，含 DeepSeek V4 侧 4 个基类和 Ascend 侧 4 个子类；顺带发现 DeepSeek V3.2 的 `DeepseekV32IndexerCache` 也在同环境；bonus 还抓到了 `MambaBase` 和 `CacheOnlyAttentionLayer`。
+- ❌ **`[ATTN_IMPL_INIT]`** × 0 — v0.3.0 的 `_scanner.install_subclass_hook` 只支持一个 callback，`attn_impl.apply()` 后跑，callback 被静默丢弃。**v0.3.1 已修**（callback 改成列表）。
+- ❌ **`[KV_MGR_INIT]`** × 0 — hybrid coordinator 在 `vllm_ascend.core.kv_cache_coordinator` 里，v0.3.0 的 consumer 扫描只扫 `vllm.v1.core.*`，漏掉了 Ascend 侧。**v0.3.1 已修**（扩到 `vllm.*` + `vllm_ascend.*` + 任何带 `coordinator` / `kv_cache` 关键字的模块）。
+- ❌ **`[KV_STARTUP_SUMMARY]`** × 0 — 用户确认原始 3000+ 行日志中一行都没有。原因未定；可能是 `type(self).__name__ == tag` 匹配没走到、或 finally 有其他因素。**v0.3.1 改成每层都 emit** 一条带 `wrapper_stage` 字段的 summary + 一条 `[ENGINE_INIT_ENTER]` 诊断行，用户 grep `wrapper_stage=DPEngineCoreProc` 拿最终状态。
+
+### v0.3.0 抓到的 LAYER_KV_SPEC 明细
+
+从 46 条 `[LAYER_KV_SPEC]` 反推出的实例分布（去重后按 spec + layer 类分组）：
+
+| owner class | spec | block_size | head_size | dtype | sliding_window | 层数（观察到） |
+|---|---|---:|---:|---|---:|---:|
+| `vllm_ascend.models.layer.attention.layer.DSAAttention` | AscendMLAAttentionSpec | 128 | 512 | bf16 | – | 41（layers 2–42 主 attention 通路） |
+| `vllm_ascend.models.deepseek_v4.AscendDeepseekV4IndexerCache` | AscendMLAAttentionSpec | 128 | 128 | int8 | – | 42（indexer k-cache） |
+| `vllm_ascend.models.deepseek_v4.AscendDeepseekV4SWACache` | AscendSlidingWindowMLASpec | 128 | 512 | bf16 | 128 | 44（SWA 缓存，按 parity 拆两组） |
+| `vllm_ascend.models.deepseek_v4.AscendCompressorStateCache` | AscendSlidingWindowMLASpec | 8 | 2048 | fp32 | 8 | 42（indexer + main compressor state） |
+| `vllm_ascend.models.deepseek_v4.AscendCompressorStateCache` | AscendSlidingWindowMLASpec | 32 | 1024 | fp32 | 128 | 20（主分支 compressor state） |
+| `vllm_ascend.models.deepseek_v4.AscendCompressorStateCache` | AscendSlidingWindowMLASpec | 8 | 512 | fp32 | 8 | ~几个 | — 少见的 head=512 fp32 变体 |
+
+这**证实了**之前基于 `[KV_GROUP]` 反推的 6 组结构 —— layer_name 层面每一条的 spec 都对上号：DSAAttention 就是主 MLA、AscendDeepseekV4IndexerCache 就是 int8 稀疏 indexer、AscendCompressorStateCache 有 block_size=8 / 32 两种，SWA 有 44 层。
+
+layer_name 里可以看到部分条目 `layer=?`（cache 类没设 `self.layer_name`），只有 `DSAAttention` 主分支设了 `layer=model.layers.X.self_attn.attn`。这个属于命名规范限制，不影响结构判断。
+
+装 v0.3.1 后再抓一次，`[ATTN_IMPL_INIT]` / `[KV_MGR_INIT]` / `[KV_STARTUP_SUMMARY]` 应该都会补齐；届时会再更新本文档补 impl_cls / manager_cls / hybrid coordinator 的真实分布。
 
 ## 七、注意事项
 

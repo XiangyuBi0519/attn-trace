@@ -44,13 +44,21 @@ def apply() -> None:
     # 覆盖源模块
     stm.get_manager_for_kv_cache_spec = wrapped
 
-    # 扫描所有已经 import 的 vllm.v1.core.* 模块，把 `from ... import
-    # get_manager_for_kv_cache_spec` 拿到的本地符号也替换掉
+    # 扫描所有 vllm.* / vllm_ascend.* / 任何自定义 plugin 模块，把
+    # `from ... import get_manager_for_kv_cache_spec` 拿到的本地符号一并替换。
+    # 之前只扫 `vllm.v1.core.*` 会漏掉 vllm_ascend.core 系列，导致 hybrid
+    # coordinator 拿的是未 patched 的引用，KV_MGR_INIT 因此从不 fire。
     replaced_in = []
     for name, mod in list(sys.modules.items()):
-        if not name.startswith("vllm.v1.core."):
-            continue
         if mod is None or mod is stm:
+            continue
+        # 跳过 stdlib 之外的 3rd party 无关模块（性能优化，非必需）
+        if not (
+            name.startswith("vllm")
+            or name.startswith("kv_cache_affinity")
+            or "coordinator" in name
+            or "kv_cache" in name
+        ):
             continue
         if getattr(mod, "get_manager_for_kv_cache_spec", None) is orig:
             mod.get_manager_for_kv_cache_spec = wrapped

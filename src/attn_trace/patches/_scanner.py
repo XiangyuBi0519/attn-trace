@@ -63,6 +63,7 @@ def install_subclass_hook(callback: Callable[[type], None], base_cls=None) -> bo
     - 现存子类：调用者自己先跑一次 walk_attention_subclasses 处理。
     - 未来子类：本函数负责让 callback 在每个新子类被定义时被调用一次。
 
+    支持多次调用 —— 后续 apply() 追加自己的 callback；hook 本体只装一次。
     返回 True 表示钩子装成功；False 表示 AttentionLayerBase 不可用。
     """
     if base_cls is None:
@@ -72,9 +73,19 @@ def install_subclass_hook(callback: Callable[[type], None], base_cls=None) -> bo
             logger.warning("attn_trace._scanner: %s", e)
             return False
 
-    # 防重复挂钩
-    if getattr(base_cls, "_attn_trace_hook_installed", False):
+    # 已经装了钩子：把新 callback 追加进去、不再重装
+    callbacks: list = getattr(base_cls, "_attn_trace_hook_callbacks", None)
+    if callbacks is not None:
+        callbacks.append(callback)
+        logger.info(
+            "attn_trace: appended subclass callback (total=%d) on %s",
+            len(callbacks), base_cls.__name__,
+        )
         return True
+
+    # 首次装钩子：建 callback 列表，做一层多路分发 wrapper
+    callbacks = [callback]
+    base_cls._attn_trace_hook_callbacks = callbacks
 
     # 保留链上原有的 __init_subclass__（ABC 有自己的、可能还有别的）
     orig = base_cls.__dict__.get("__init_subclass__")
@@ -93,15 +104,21 @@ def install_subclass_hook(callback: Callable[[type], None], base_cls=None) -> bo
                     pass
             except Exception:
                 pass
-        # 再跑 callback
-        try:
-            callback(cls)
-        except Exception as e:
-            logger.warning("attn_trace: subclass hook callback failed for %s: %s", cls, e)
+        # 逐个跑 callback；任一 callback 抛异常都不影响其它
+        for cb in callbacks:
+            try:
+                cb(cls)
+            except Exception as e:
+                logger.warning(
+                    "attn_trace: subclass hook callback %s failed for %s: %s",
+                    getattr(cb, "__qualname__", cb), cls, e,
+                )
 
     base_cls.__init_subclass__ = classmethod(_new_hook)
-    base_cls._attn_trace_hook_installed = True
-    logger.info("attn_trace: installed __init_subclass__ hook on %s", base_cls.__name__)
+    logger.info(
+        "attn_trace: installed __init_subclass__ hook on %s (callbacks=1)",
+        base_cls.__name__,
+    )
     return True
 
 

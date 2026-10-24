@@ -38,9 +38,11 @@ def _patch_resolve_block_sizes() -> None:
 
     orig = ku.resolve_kv_cache_block_sizes
 
-    def wrapped(kv_cache_config, vllm_config):
-        scheduler_bs, hash_bs = orig(kv_cache_config, vllm_config)
+    def wrapped(*args, **kwargs):
+        scheduler_bs, hash_bs = orig(*args, **kwargs)
         try:
+            kv_cache_config = args[0] if args else kwargs.get("kv_cache_config")
+            vllm_config = args[1] if len(args) > 1 else kwargs.get("vllm_config")
             groups = kv_cache_config.kv_cache_groups
             logger.info(
                 "[BLOCK_SIZES] scheduler_block_size=%d hash_block_size=%d "
@@ -84,7 +86,7 @@ def _patch_initialize_kv_caches() -> None:
 
     orig = EngineCore._initialize_kv_caches
 
-    def wrapped(self, vllm_config):
+    def wrapped(self, *w_args, **w_kwargs):
         # 诊断：确认 EngineCore.__init__ 现在是不是还是我们的 wrapper
         # （多 plugin 场景下常见被后加载的 plugin 覆写），不影响业务逻辑
         try:
@@ -100,7 +102,7 @@ def _patch_initialize_kv_caches() -> None:
         except Exception:
             pass
 
-        result = orig(self, vllm_config)
+        result = orig(self, *w_args, **w_kwargs)
         try:
             _log_kv_groups(result)
         except Exception as e:

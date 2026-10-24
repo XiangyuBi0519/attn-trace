@@ -23,9 +23,16 @@ def apply() -> None:
 
     orig_fn = orig_cm.__func__
 
-    def wrapped_fn(cls, selected_backend, attn_selector_config, num_heads=None):
-        result = orig_fn(cls, selected_backend, attn_selector_config, num_heads)
+    def wrapped_fn(cls, *args, **kwargs):
+        # 透传不写死签名，防 0.30 参数变动 TypeError。
+        result = orig_fn(cls, *args, **kwargs)
         try:
+            selected_backend = (
+                args[0] if args else kwargs.get("selected_backend")
+            )
+            attn_selector_config = kwargs.get(
+                "attn_selector_config", args[1] if len(args) > 1 else None
+            )
             key = (
                 getattr(attn_selector_config, "use_mla", None),
                 getattr(attn_selector_config, "use_sparse", None),

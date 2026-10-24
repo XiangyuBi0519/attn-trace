@@ -33,22 +33,26 @@ def apply() -> None:
 
     orig = stm.get_manager_for_kv_cache_spec
 
-    def wrapped(kv_cache_spec, max_num_batched_tokens, max_model_len, **kwargs):
-        manager = orig(
-            kv_cache_spec, max_num_batched_tokens, max_model_len, **kwargs
-        )
+    def wrapped(*args, **kwargs):
+        # 不写死签名：直接透传。vLLM 0.30 / AscendHybridKVCacheCoordinator 调用
+        # get_manager_for_kv_cache_spec 的约定变了（max_num_batched_tokens 不再
+        # 按老位置传），写死 (kv_cache_spec, max_num_batched_tokens, max_model_len)
+        # 会抛 TypeError 把 EngineCore 启动打挂。透传 + 事后内省最稳。
+        manager = orig(*args, **kwargs)
         try:
+            spec = args[0] if args else kwargs.get("kv_cache_spec")
             logger.info(
                 "[KV_MGR_INIT] spec=%s.%s manager=%s.%s block_size=%s "
                 "kv_group_id=%s max_admission_blocks=%s "
                 "max_num_batched_tokens=%s max_model_len=%s",
-                type(kv_cache_spec).__module__, type(kv_cache_spec).__name__,
+                type(spec).__module__ if spec is not None else "?",
+                type(spec).__name__ if spec is not None else "?",
                 type(manager).__module__, type(manager).__name__,
-                getattr(kv_cache_spec, "block_size", None),
+                getattr(spec, "block_size", None),
                 kwargs.get("kv_cache_group_id"),
                 kwargs.get("max_admission_blocks_per_request"),
-                max_num_batched_tokens,
-                max_model_len,
+                kwargs.get("max_num_batched_tokens"),
+                kwargs.get("max_model_len"),
             )
         except Exception as e:
             logger.warning("[KV_MGR_INIT] log failed: %s", e)

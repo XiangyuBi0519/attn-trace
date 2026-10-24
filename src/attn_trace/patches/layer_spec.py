@@ -59,8 +59,8 @@ def _wrap(cls) -> bool:
 
 
 def _make_wrapper(orig_fn, owner_cls):
-    def wrapper(self, vllm_config):
-        spec = orig_fn(self, vllm_config)
+    def wrapper(self, *args, **kwargs):
+        spec = orig_fn(self, *args, **kwargs)
         _emit(self, owner_cls, spec)
         return spec
     return wrapper

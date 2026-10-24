@@ -14,14 +14,18 @@ def apply() -> None:
 
     _orig = sel._cached_get_attn_backend  # 已被 functools.cache 包过
 
-    def wrapped(backend, attn_selector_config, num_heads=None):
-        # 直接调原（cached）实现，保留原来的缓存语义
-        result = _orig(
-            backend=backend,
-            attn_selector_config=attn_selector_config,
-            num_heads=num_heads,
-        )
+    def wrapped(*args, **kwargs):
+        # 直接透传调原（cached）实现，保留缓存语义；不写死签名以免 0.30 参数
+        # 名/顺序变动时 TypeError。
+        result = _orig(*args, **kwargs)
         try:
+            backend = kwargs.get("backend", args[0] if args else None)
+            attn_selector_config = kwargs.get(
+                "attn_selector_config", args[1] if len(args) > 1 else None
+            )
+            num_heads = kwargs.get(
+                "num_heads", args[2] if len(args) > 2 else None
+            )
             required_layout = None
             try:
                 required_layout = result.get_required_kv_cache_layout()

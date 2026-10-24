@@ -135,13 +135,15 @@ def _log_kv_groups(kv_cache_config) -> None:
         spec = g.kv_cache_spec
         layer_names = list(g.layer_names)
         logger.info(
-            "[KV_GROUP] idx=%d spec=%s.%s block_size=%s num_layers=%d "
+            "[KV_GROUP] idx=%d spec=%s.%s block_size=%s compress_ratio=%s num_layers=%d "
             "num_kv_heads=%s head_size=%s dtype=%s "
             "sliding_window=%s attention_chunk_size=%s "
             "sample_layers=%s",
             i,
             type(spec).__module__, type(spec).__name__,
             getattr(spec, "block_size", None),
+            # vllm-ascend get_kv_cache_compression_ratio(spec) == spec.tokens_per_state
+            getattr(spec, "tokens_per_state", None),
             len(layer_names),
             getattr(spec, "num_kv_heads", None),
             getattr(spec, "head_size", None),

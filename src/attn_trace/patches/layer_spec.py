@@ -72,13 +72,16 @@ def _emit(layer, owner_cls, spec) -> None:
     try:
         logger.info(
             "[LAYER_KV_SPEC] layer=%s cls=%s.%s spec=%s block_size=%s "
-            "num_kv_heads=%s head_size=%s dtype=%s "
+            "compress_ratio=%s num_kv_heads=%s head_size=%s dtype=%s "
             "sliding_window=%s attention_chunk_size=%s "
             "kv_dtype=%s attn_type=%s use_mla=%s",
-            getattr(layer, "layer_name", "?"),
+            # 纯 cache 层（如 DeepseekV41CacheLayer）只有 prefix、没有 layer_name，回退读 prefix
+            getattr(layer, "layer_name", None) or getattr(layer, "prefix", "?"),
             owner_cls.__module__, owner_cls.__name__,
             type(spec).__name__,
             getattr(spec, "block_size", None),
+            # vllm-ascend get_kv_cache_compression_ratio(spec) == spec.tokens_per_state
+            getattr(spec, "tokens_per_state", None),
             getattr(spec, "num_kv_heads", None),
             getattr(spec, "head_size", None),
             getattr(spec, "dtype", None),

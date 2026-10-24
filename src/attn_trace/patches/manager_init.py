@@ -43,15 +43,17 @@ def apply() -> None:
             spec = args[0] if args else kwargs.get("kv_cache_spec")
             logger.info(
                 "[KV_MGR_INIT] spec=%s.%s manager=%s.%s block_size=%s "
-                "kv_group_id=%s max_admission_blocks=%s "
-                "max_num_batched_tokens=%s max_model_len=%s",
+                "compress_ratio=%s kv_group_id=%s max_admission_blocks=%s "
+                "max_in_flight_tokens=%s max_model_len=%s",
                 type(spec).__module__ if spec is not None else "?",
                 type(spec).__name__ if spec is not None else "?",
                 type(manager).__module__, type(manager).__name__,
                 getattr(spec, "block_size", None),
+                getattr(spec, "tokens_per_state", None),
                 kwargs.get("kv_cache_group_id"),
                 kwargs.get("max_admission_blocks_per_request"),
-                kwargs.get("max_num_batched_tokens"),
+                # vLLM 0.30 把 max_num_batched_tokens 改名 max_in_flight_tokens；兼容两者
+                kwargs.get("max_in_flight_tokens", kwargs.get("max_num_batched_tokens")),
                 kwargs.get("max_model_len"),
             )
         except Exception as e:
